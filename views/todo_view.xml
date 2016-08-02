@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <act_window id="action_todo_user"
+        name="To-do Task"
+        res_model="todo.task"
+        view_mode="tree,form" />
+
+        <menuitem id="menu_user"
+        name="To-Do User Book"
+        sequence="20"
+        action="action_todo_user"/>
+
+        <record id="view_form_todo_task_inherited" model="ir.ui.view">
+            <field name="name">Todo Task form – User extension</field>
+            <field name="model">todo.task</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="todo.view_form_todo_task"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="user_id" />
+                </field>
+                <field name="is_done" position="before">
+                    <field name="date_deadline" />
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="string">I have to ...</attribute>
+                </field>
+                <field name="active" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_tree_todo_task_inherited" model="ir.ui.view">
+            <field name="name">Todo Task tree – User extension</field>
+            <field name="model">todo.task</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="todo.view_tree_todo_task"/>
+            <field name="arch" type="xml">
+                <field name="topic" position="after">
+                    <field name="user_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_filter_todo_task_inherited" model="ir.ui.view">
+            <field name="name">Todo Task tree – User extension</field>
+            <field name="model">todo.task</field>
+            <field name="inherit_id" ref="todo.view_filter_todo_task"/>
+            <field name="arch" type="xml">
+                <field name="topic" position="after">
+                    <field name="user_id" />
+                    <filter name="filter_my_tasks" string="My Tasks"
+                        domain="[('user_id','in',[uid,False])]" />
+                    <filter name="filter_not_assigned" string="Not Assigned"
+                        domain="[('user_id','=',False)]" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Modify menu item -->
+        <record id="todo.menu_todo_task" model="ir.ui.menu">
+            <field name="name">My To-Do</field>
+        </record>
+        <!-- Action to open To-Do Task list -->
+        <record model="ir.actions.act_window" id="todo.action_todo_task">
+            <field name="context">
+                {'search_default_filter_my_tasks': True}
+            </field>
+        </record>
+    </data>
+</openerp>
